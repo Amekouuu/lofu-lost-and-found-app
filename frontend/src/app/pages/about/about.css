@@ -1,0 +1,224 @@
+/* ── HERO ── */
+.about-hero {
+  background: var(--bg-2);
+  padding: 72px 0 64px;
+  border-bottom: 1px solid var(--border);
+}
+.about-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 56px;
+}
+.hero-label {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+.hero-text h1 {
+  font-size: clamp(32px, 4vw, 50px);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 400px;
+}
+
+/* Image grid */
+.img-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.img-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.img-placeholder {
+  background: var(--blue-light);
+  border: 2px dashed var(--border-2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 16px;
+  overflow: hidden;
+}
+.img-placeholder span { font-size: 36px; }
+.img-placeholder p    { font-size: 11px; color: var(--text-3); word-break: break-all; }
+.img-tall { aspect-ratio: 2/3; }
+.img-sm   { aspect-ratio: 3/2; }
+
+/* ── MISSION ── */
+.mission-section {
+  padding: 64px 32px;
+}
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.mission-text {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.mission-text p {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+.img-mission {
+  aspect-ratio: 4/3;
+}
+
+/* ── HOW IT WORKS ── */
+.how-section {
+  background: var(--bg-2);
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.step-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.step-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.step-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+
+/* ── OUR HISTORY ── */
+.history-section {
+  padding: 72px 32px;
+}
+.history-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.history-text h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+.history-text p {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+.history-text p:last-child { margin-bottom: 0; }
+.img-history { aspect-ratio: 4/3; }
+
+/* ── LIVING OUR MISSION ── */
+.living-section {
+  background: var(--bg-2);
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+}
+.living-subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-2);
+  margin-top: -32px;
+  margin-bottom: 48px;
+}
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.quote-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.quote-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.quote-icon {
+  font-size: 40px;
+  line-height: 1;
+  color: var(--blue-light);
+  font-family: Georgia, serif;
+  font-weight: 900;
+}
+.quote-text {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.75;
+  flex: 1;
+}
+.quote-author {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .about-hero-inner { grid-template-columns: 1fr; }
+  .hero-images      { display: none; }
+  .mission-grid     { grid-template-columns: 1fr; }
+  .history-grid     { grid-template-columns: 1fr; }
+  .steps-grid       { grid-template-columns: 1fr; }
+  .quotes-grid      { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .about-hero { padding: 48px 0; }
+}

@@ -1,0 +1,114 @@
+<app-navbar></app-navbar>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner page-container">
+
+    <div class="hero-text fade-up">
+      <h1>Find What's Lost.<br>Return What's<br>Found. Together.</h1>
+      <p>
+        LoFu is a community-powered lost and found app made for Angeles City —
+        helping neighbors quickly post, find, and return lost items through real local connections.
+      </p>
+      <a routerLink="/lost-items" class="btn btn-primary btn-lg">Get started</a>
+    </div>
+
+    <div class="hero-image fade-up">
+      <div class="hero-icon-grid">
+        <div class="hero-icon-card">🔑</div>
+        <div class="hero-icon-card">👜</div>
+        <div class="hero-icon-card">📱</div>
+        <div class="hero-icon-card">👓</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── WHY LOFU ── -->
+<section class="why-section">
+  <div class="page-container">
+    <h2 class="section-title fade-up">The Heart of Our Community</h2>
+
+    <div class="why-grid fade-up">
+      <div class="why-label">
+        <h3>Why Choose<br>LoFu?</h3>
+      </div>
+      <div class="why-card" *ngFor="let f of features">
+        <div class="why-card-title">{{ f.title }}</div>
+        <p class="why-card-desc">{{ f.desc }}</p>
+        <span class="why-more">More Info <span class="why-arrow">→</span></span>
+      </div>
+    </div>
+
+    <div class="why-tagline fade-up">
+      LoFu is more than a list — it's a community-driven platform dedicated to
+      bringing people and their belongings back together.
+    </div>
+  </div>
+</section>
+
+<!-- ── COMMUNITY FEATURES ── -->
+<section class="community-section">
+  <div class="page-container">
+    <h2 class="section-title fade-up">
+      Designed for a Helpful,<br>Honest Community
+    </h2>
+    <div class="community-grid fade-up">
+      <div class="community-card" *ngFor="let c of communityCards; let i = index"
+           [class.community-card--dark]="i === 0">
+        <div class="community-card-header">
+          <div class="community-dot"></div>
+          <span class="community-card-title">{{ c.title }}</span>
+        </div>
+        <p class="community-card-desc">{{ c.desc }}</p>
+        <div class="community-card-illustration">
+          <span class="community-icon">{{ c.icon }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials-section">
+  <div class="page-container">
+    <div class="testimonials-label fade-up">TESTIMONIALS</div>
+    <h2 class="section-title fade-up">Our User Reviews</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up"
+           *ngFor="let t of testimonials; let i = index"
+           [style.animation-delay]="(i * 0.05) + 's'">
+        <p class="testimonial-quote">"{{ t.quote }}"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">{{ t.name[0] }}</div>
+          <div>
+            <div class="testimonial-name">{{ t.name }}</div>
+            <div class="testimonial-role">{{ t.role }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ── -->
+<section class="cta-section">
+  <div class="page-container cta-inner">
+    <div class="cta-text fade-up">
+      <h2>Post. Find. Reunited.</h2>
+      <p>
+        LoFu helps neighbors track lost items, verify claims, and manage returns
+        efficiently — ensuring every item finds its way back home.
+      </p>
+      <a routerLink="/register" class="btn btn-white btn-lg">Get started</a>
+    </div>
+    <div class="cta-illustration fade-up">
+      <span class="cta-emoji">🧩</span>
+      <span class="cta-emoji">👥</span>
+      <span class="cta-emoji">🤝</span>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

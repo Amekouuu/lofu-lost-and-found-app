@@ -1,0 +1,136 @@
+<div class="auth-page auth-page--register">
+
+  <!-- Left: Illustration placeholder -->
+  <div class="auth-image-side">
+    <div class="auth-illustration">
+      <!-- REPLACE: swap the div below with an <img src="assets/register-illustration.png" /> -->
+      <div class="illustration-placeholder">
+        <span class="illustration-icon">🧑‍🤝‍🧑</span>
+        <p>Replace with register illustration<br><code>assets/register-illustration.png</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form -->
+  <div class="auth-form-side">
+
+    <!-- Logo -->
+    <a routerLink="/" class="auth-logo">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#1a3fad" stroke-width="2"/>
+        <circle cx="16" cy="16" r="6" fill="#1a3fad"/>
+        <path d="M16 4v4M16 24v4M4 16h4M24 16h4" stroke="#1a3fad" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="auth-logo-text">LoFu</span>
+    </a>
+
+    <div class="auth-form-wrap">
+      <h1 class="auth-title">Sign up</h1>
+      <p class="auth-subtitle">Let's get you all set up so you can access your personal account.</p>
+
+      <!-- Error -->
+      <div class="auth-error" *ngIf="error">{{ error }}</div>
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+
+        <!-- Name row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input
+              class="form-control"
+              type="text"
+              placeholder="John"
+              [(ngModel)]="firstName"
+              name="firstName"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Doe"
+              [(ngModel)]="lastName"
+              name="lastName"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Email & Phone row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              class="form-control"
+              type="email"
+              placeholder="johndoe@gmail.com"
+              [(ngModel)]="email"
+              name="email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input
+              class="form-control"
+              type="tel"
+              placeholder="johndoe@gmail.com"
+              [(ngModel)]="phone"
+              name="phone"
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <input
+              class="form-control"
+              [type]="showPass ? 'text' : 'password'"
+              placeholder="••••••••••••"
+              [(ngModel)]="password"
+              name="password"
+              required
+            />
+            <button type="button" class="eye-btn" (click)="showPass = !showPass">
+              {{ showPass ? '🙈' : '👁' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <div class="input-wrap">
+            <input
+              class="form-control"
+              [type]="showConfirm ? 'text' : 'password'"
+              placeholder="••••••••••••"
+              [(ngModel)]="confirmPass"
+              name="confirmPass"
+              required
+            />
+            <button type="button" class="eye-btn" (click)="showConfirm = !showConfirm">
+              {{ showConfirm ? '🙈' : '👁' }}
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" [disabled]="loading">
+          <span *ngIf="!loading">Create account</span>
+          <span *ngIf="loading" class="btn-spinner"></span>
+        </button>
+
+        <p class="auth-switch">
+          Already have an account? <a routerLink="/login">Login</a>
+        </p>
+
+      </form>
+    </div>
+  </div>
+
+</div>

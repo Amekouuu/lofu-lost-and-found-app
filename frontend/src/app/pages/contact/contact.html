@@ -1,0 +1,149 @@
+<app-navbar></app-navbar>
+
+<div class="contact-page">
+
+  <!-- ── TOP SECTION ── -->
+  <section class="contact-hero page-container">
+    <div class="contact-hero-inner">
+
+      <div class="hero-left fade-up">
+        <p class="hero-label">Text</p>
+        <h1>Get in touch with us.<br>We're here to assist you.</h1>
+
+        <!-- Social links -->
+        <div class="social-links">
+          <a href="#" class="social-btn" title="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" title="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" title="Twitter / X">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 4l16 16M4 20L20 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="contact-form-wrap fade-up">
+        <p class="form-section-label">Input area</p>
+
+        <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+
+          <!-- Error -->
+          <div class="form-error" *ngIf="error">{{ error }}</div>
+
+          <!-- Row 1: Name / Email / Phone -->
+          <div class="form-row-3">
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="text"
+                placeholder="Your Name"
+                [(ngModel)]="name"
+                name="name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="email"
+                placeholder="Email Address"
+                [(ngModel)]="email"
+                name="email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="tel"
+                placeholder="Phone Number (optional)"
+                [(ngModel)]="phone"
+                name="phone"
+              />
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="form-group">
+            <textarea
+              class="form-control message-area"
+              placeholder="Message"
+              [(ngModel)]="message"
+              name="message"
+              rows="5"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">
+            <span *ngIf="!loading">Leave us a Message →</span>
+            <span *ngIf="loading" class="btn-spinner"></span>
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CONTACT INFO ── -->
+  <section class="contact-info-section">
+    <div class="page-container contact-info-inner">
+
+      <div class="info-headline fade-up">
+        <h2>We are always<br>happy to assist you</h2>
+      </div>
+
+      <div class="info-cards fade-up">
+        <div class="info-card">
+          <p class="info-card-label">Email Address</p>
+          <div class="info-divider"></div>
+          <a href="mailto:help@info.com" class="info-card-value">help@info.com</a>
+          <p class="info-card-note">
+            Assistance hours:<br>
+            Monday – Friday 6 am to 8 pm EST
+          </p>
+        </div>
+        <div class="info-card">
+          <p class="info-card-label">Number</p>
+          <div class="info-divider"></div>
+          <p class="info-card-value">(808) 998-34256</p>
+          <p class="info-card-note">
+            Assistance hours:<br>
+            Monday – Friday 6 am to 8 pm EST
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- ── SUCCESS MODAL ── -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeModal()">✕</button>
+    <div class="modal-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="12" fill="#22c55e"/>
+        <path d="M7 12.5l3.5 3.5 6.5-7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 class="modal-title">Your message has been sent!</h3>
+    <button class="btn btn-primary btn-full modal-btn" (click)="closeModal()">Thanks!</button>
+  </div>
+</div>
+
+<app-footer></app-footer>

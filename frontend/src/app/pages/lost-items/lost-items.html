@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+
+<div class="lost-page page-container">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Lost Items</h1>
+
+    <div class="search-bar">
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search Item"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+      />
+      <button class="search-btn" (click)="applyFilters()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-row">
+    <select class="form-control filter-select" [(ngModel)]="selectedLandmark" (change)="applyFilters()">
+      <option value="">All Landmarks</option>
+      <option *ngFor="let l of landmarks" [value]="l">{{ l }}</option>
+    </select>
+    <select class="form-control filter-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+      <option value="">All Categories</option>
+      <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+    </select>
+    <button class="btn btn-ghost btn-sm clear-btn"
+      *ngIf="searchQuery || selectedLandmark || selectedCategory"
+      (click)="searchQuery=''; selectedLandmark=''; selectedCategory=''; applyFilters()">
+      ✕ Clear
+    </button>
+  </div>
+
+  <!-- Loading Skeletons -->
+  <div class="items-grid" *ngIf="postsService.loading$ | async">
+    <div class="item-card skeleton-card" *ngFor="let i of [1,2,3,4]">
+      <div class="skeleton card-img-skeleton"></div>
+      <div class="skeleton-body">
+        <div class="skeleton" style="height:18px; width:60%; margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:13px; width:90%; margin-bottom:5px;"></div>
+        <div class="skeleton" style="height:13px; width:75%; margin-bottom:5px;"></div>
+        <div class="skeleton" style="height:13px; width:80%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Grid -->
+  <div class="items-grid" *ngIf="!(postsService.loading$ | async)">
+
+    <a class="item-card"
+       *ngFor="let post of (postsService.posts$ | async)"
+       [routerLink]="['/post', post._id]">
+
+      <!-- Image -->
+      <div class="card-image">
+        <img *ngIf="post.images.length" [src]="post.images[0].url" [alt]="post.itemName" />
+        <div *ngIf="!post.images.length" class="card-img-placeholder">
+          <span>{{ getCategoryIcon(post.category) }}</span>
+        </div>
+
+        <!-- Overlays at bottom of image -->
+        <div class="card-image-footer">
+          <div class="card-info">
+            <h3 class="card-name">{{ post.itemName }}</h3>
+            <span class="badge-lost">Lost</span>
+          </div>
+          <div class="card-meta-line">
+            <span>Last seen: {{ post.incidentDate | date:'MMMM d, yyyy' }} • {{ post.incidentTimeApprox }}</span>
+          </div>
+          <div class="card-meta-line">
+            <span>Location: {{ post.landmark }}</span>
+          </div>
+          <div class="card-meta-line">
+            <span>Description: {{ post.description | slice:0:40 }}{{ post.description.length > 40 ? '...' : '' }}</span>
+          </div>
+          <div class="reward-tag" *ngIf="post.isFeatured">Reward Offered</div>
+        </div>
+      </div>
+
+      <!-- Found It Button -->
+      <div class="card-action">
+        <ng-container *ngIf="authService.currentUser$ | async; else loginPrompt">
+          <button class="btn-found" (click)="$event.preventDefault()">
+            I found this!
+          </button>
+        </ng-container>
+        <ng-template #loginPrompt>
+          <a routerLink="/login" class="btn-found" (click)="$event.stopPropagation()">
+            Log in to help
+          </a>
+        </ng-template>
+      </div>
+
+    </a>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="(postsService.posts$ | async)?.length === 0">
+      <span class="empty-icon">🔍</span>
+      <h3>No lost items found</h3>
+      <p>Try adjusting your search or filters.</p>
+      <button class="btn btn-ghost"
+        (click)="searchQuery=''; selectedLandmark=''; selectedCategory=''; applyFilters()">
+        Clear filters
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="(postsService.totalPages$ | async)! > 1">
+    <button class="page-btn"
+      (click)="postsService.prevPage()"
+      [disabled]="postsService.currentPage === 1">
+      ‹
+    </button>
+    <button class="page-btn"
+      *ngFor="let p of [].constructor(postsService.totalPages$ | async); let i = index"
+      [class.active]="postsService.currentPage === i + 1"
+      (click)="postsService.goToPage(i + 1)">
+      {{ i + 1 }}
+    </button>
+    <button class="page-btn"
+      (click)="postsService.nextPage()"
+      [disabled]="postsService.currentPage === (postsService.totalPages$ | async)">
+      Next
+    </button>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

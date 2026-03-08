@@ -1,0 +1,272 @@
+<app-navbar></app-navbar>
+
+<div class="create-page page-container">
+
+  <!-- Page Header -->
+  <div class="page-header fade-up">
+    <div class="header-text">
+      <h1>Post an Item</h1>
+      <p>Fill in the details below to report a lost or found item in Angeles City.</p>
+    </div>
+    <!-- Step indicator -->
+    <div class="steps-indicator">
+      <div class="step-dot" [class.active]="step >= 1" [class.done]="step > 1">
+        <span>1</span>
+        <p>Item Info</p>
+      </div>
+      <div class="step-line" [class.done]="step > 1"></div>
+      <div class="step-dot" [class.active]="step >= 2" [class.done]="step > 2">
+        <span>2</span>
+        <p>Location & Date</p>
+      </div>
+      <div class="step-line" [class.done]="step > 2"></div>
+      <div class="step-dot" [class.active]="step >= 3">
+        <span>3</span>
+        <p>Review & Post</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Banner -->
+  <div class="form-error-banner" *ngIf="error">{{ error }}</div>
+
+  <div class="form-card fade-up">
+
+    <!-- ── STEP 1: Item Info ── -->
+    <div *ngIf="step === 1">
+      <h2 class="step-title">Item Information</h2>
+      <p class="step-desc">Tell us about the item you lost or found.</p>
+
+      <!-- Lost / Found Toggle -->
+      <div class="type-toggle form-group">
+        <label class="form-label">I want to report a *</label>
+        <div class="toggle-btns">
+          <button type="button" class="toggle-btn" [class.lost]="type === 'Lost'" (click)="type = 'Lost'">
+            🔴 Lost Item
+          </button>
+          <button type="button" class="toggle-btn" [class.found]="type === 'Found'" (click)="type = 'Found'">
+            🟢 Found Item
+          </button>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <!-- Item Name -->
+        <div class="form-group span-2">
+          <label class="form-label">Item Name *</label>
+          <input class="form-control" type="text" placeholder="e.g. Black Samsung Phone"
+            [(ngModel)]="itemName" name="itemName" maxlength="100" />
+          <span class="char-count">{{ itemName.length }}/100</span>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select class="form-control" [(ngModel)]="category" name="category">
+            <option value="">Select category</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <!-- Brand -->
+        <div class="form-group">
+          <label class="form-label">Brand <span class="optional">(optional)</span></label>
+          <input class="form-control" type="text" placeholder="e.g. Samsung, Nike, Coach"
+            [(ngModel)]="brand" name="brand" />
+        </div>
+
+        <!-- Primary Color -->
+        <div class="form-group">
+          <label class="form-label">Primary Color *</label>
+          <select class="form-control" [(ngModel)]="color" name="color">
+            <option value="">Select color</option>
+            <option *ngFor="let c of colors" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <!-- Secondary Color -->
+        <div class="form-group">
+          <label class="form-label">Secondary Color <span class="optional">(optional)</span></label>
+          <select class="form-control" [(ngModel)]="secondaryColor" name="secondaryColor">
+            <option value="">None</option>
+            <option *ngFor="let c of colors" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group span-2">
+          <label class="form-label">Description *</label>
+          <textarea class="form-control" rows="4"
+            placeholder="Describe the item in detail — unique markings, contents, condition, etc. (min. 20 characters)"
+            [(ngModel)]="description" name="description" maxlength="1000"></textarea>
+          <span class="char-count">{{ description.length }}/1000</span>
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group span-2">
+          <label class="form-label">Tags <span class="optional">(optional — comma separated)</span></label>
+          <input class="form-control" type="text" placeholder="e.g. cracked screen, sticker, leather strap"
+            [(ngModel)]="tags" name="tags" />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group span-2">
+          <label class="form-label">Photos <span class="optional">(up to 4 images)</span></label>
+          <div class="upload-area" (click)="fileInput.click()">
+            <input #fileInput type="file" accept="image/*" multiple hidden (change)="onFileSelect($event)" />
+            <div class="upload-inner" *ngIf="imagePreviews.length === 0">
+              <span class="upload-icon">📷</span>
+              <p>Click to upload images</p>
+              <span class="upload-hint">JPG, PNG, WEBP up to 5MB each</span>
+            </div>
+            <div class="image-previews" *ngIf="imagePreviews.length > 0" (click)="$event.stopPropagation()">
+              <div class="preview-wrap" *ngFor="let img of imagePreviews; let i = index">
+                <img [src]="img" alt="Preview {{ i + 1 }}" />
+                <button class="remove-img" (click)="removeImage(i)">✕</button>
+              </div>
+              <div class="add-more" (click)="fileInput.click()" *ngIf="imagePreviews.length < 4">
+                <span>+ Add more</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <span></span>
+        <button class="btn btn-primary" (click)="nextStep()" [disabled]="!isStep1Valid">
+          Next: Location & Date →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Location & Date ── -->
+    <div *ngIf="step === 2">
+      <h2 class="step-title">Location & Date</h2>
+      <p class="step-desc">Where and when was the item lost or found?</p>
+
+      <div class="form-grid">
+        <!-- Landmark -->
+        <div class="form-group span-2">
+          <label class="form-label">Landmark / Area *</label>
+          <select class="form-control" [(ngModel)]="landmark" name="landmark">
+            <option value="">Select a landmark in Angeles City</option>
+            <option *ngFor="let l of landmarks" [value]="l">{{ l }}</option>
+          </select>
+        </div>
+
+        <!-- Landmark Detail -->
+        <div class="form-group span-2">
+          <label class="form-label">Specific Location Detail <span class="optional">(optional)</span></label>
+          <input class="form-control" type="text"
+            placeholder="e.g. Near the food court entrance, 2nd floor"
+            [(ngModel)]="landmarkDetail" name="landmarkDetail" maxlength="200" />
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label class="form-label">Date Lost / Found *</label>
+          <input class="form-control" type="date" [(ngModel)]="incidentDate" name="incidentDate" />
+        </div>
+
+        <!-- Time of Day -->
+        <div class="form-group">
+          <label class="form-label">Approximate Time of Day</label>
+          <select class="form-control" [(ngModel)]="incidentTimeApprox" name="incidentTimeApprox">
+            <option *ngFor="let t of timeOptions" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-ghost" (click)="prevStep()">← Back</button>
+        <button class="btn btn-primary" (click)="nextStep()" [disabled]="!isStep2Valid">
+          Next: Review →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Review ── -->
+    <div *ngIf="step === 3">
+      <h2 class="step-title">Review Your Post</h2>
+      <p class="step-desc">Double-check everything before posting.</p>
+
+      <div class="review-grid">
+
+        <div class="review-section">
+          <h4>Item Details</h4>
+          <div class="review-row">
+            <span class="review-label">Type</span>
+            <span [class]="type === 'Lost' ? 'badge-lost' : 'badge-found'">{{ type }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Name</span>
+            <span class="review-value">{{ itemName }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Category</span>
+            <span class="review-value">{{ category }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Color</span>
+            <span class="review-value">{{ color }}{{ secondaryColor ? ' / ' + secondaryColor : '' }}</span>
+          </div>
+          <div class="review-row" *ngIf="brand">
+            <span class="review-label">Brand</span>
+            <span class="review-value">{{ brand }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Description</span>
+            <span class="review-value review-desc">{{ description }}</span>
+          </div>
+          <div class="review-row" *ngIf="parsedTags.length">
+            <span class="review-label">Tags</span>
+            <div class="tag-list">
+              <span class="tag-chip" *ngFor="let t of parsedTags">{{ t }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-section">
+          <h4>Location & Date</h4>
+          <div class="review-row">
+            <span class="review-label">Landmark</span>
+            <span class="review-value">{{ landmark }}</span>
+          </div>
+          <div class="review-row" *ngIf="landmarkDetail">
+            <span class="review-label">Detail</span>
+            <span class="review-value">{{ landmarkDetail }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Date</span>
+            <span class="review-value">{{ incidentDate | date:'MMMM d, yyyy' }}</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Time</span>
+            <span class="review-value">{{ incidentTimeApprox }}</span>
+          </div>
+        </div>
+
+        <!-- Image previews in review -->
+        <div class="review-section span-2" *ngIf="imagePreviews.length">
+          <h4>Photos</h4>
+          <div class="review-images">
+            <img *ngFor="let img of imagePreviews" [src]="img" alt="Post image" />
+          </div>
+        </div>
+
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-ghost" (click)="prevStep()">← Back</button>
+        <button class="btn btn-primary btn-submit" (click)="onSubmit()" [disabled]="loading">
+          <span *ngIf="!loading">🚀 Submit Post</span>
+          <span *ngIf="loading" class="btn-spinner"></span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

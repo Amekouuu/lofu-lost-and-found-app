@@ -1,0 +1,248 @@
+<app-navbar></app-navbar>
+
+<!-- Loading -->
+<div class="loading-wrap" *ngIf="loading">
+  <div class="spinner"></div>
+</div>
+
+<!-- Error -->
+<div class="error-wrap page-container" *ngIf="error && !loading">
+  <p>{{ error }}</p>
+  <a routerLink="/" class="btn btn-ghost">← Back to feed</a>
+</div>
+
+<ng-container *ngIf="user && !loading">
+  <div class="profile-page">
+
+    <!-- ── COVER & AVATAR ── -->
+    <div class="profile-cover">
+      <div class="cover-bg"></div>
+      <div class="page-container cover-inner">
+        <div class="avatar-wrap">
+          <div class="avatar" [class.has-image]="user.avatarUrl">
+            <img *ngIf="user.avatarUrl" [src]="user.avatarUrl" [alt]="user.username" />
+            <span *ngIf="!user.avatarUrl">{{ user.username[0].toUpperCase() }}</span>
+          </div>
+          <div class="verified-badge" *ngIf="user.isVerifiedFinder" title="Verified Finder">✦</div>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-name-row">
+            <h1 class="profile-name">{{ user.displayName || user.username }}</h1>
+            <span class="profile-username">&#64;{{ user.username }}</span>
+          </div>
+          <div class="profile-badges" *ngIf="user.badges && user.badges.length">
+            <span class="badge-chip" *ngFor="let b of user.badges">
+              {{ getBadgeLabel(b.type) }}
+            </span>
+          </div>
+          <div class="profile-meta">
+            <span *ngIf="user.location && user.location.landmark">📍 {{ user.location.landmark }}</span>
+            <span>🗓 Joined {{ user.createdAt | date:'MMMM yyyy' }}</span>
+          </div>
+        </div>
+
+        <div class="profile-actions" *ngIf="isOwnProfile">
+          <button class="btn btn-outline" (click)="openEditModal()">✏️ Edit Profile</button>
+          <button class="btn btn-danger" (click)="openDeleteModal()">🗑 Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS BAR ── -->
+    <div class="stats-bar">
+      <div class="page-container stats-inner">
+        <div class="stat-item">
+          <span class="stat-num">{{ user.trustPoints }}</span>
+          <span class="stat-label">Trust Points</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ user.stats && user.stats.totalPostsCreated ? user.stats.totalPostsCreated : 0 }}</span>
+          <span class="stat-label">Posts Created</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ user.stats && user.stats.totalItemsReturned ? user.stats.totalItemsReturned : 0 }}</span>
+          <span class="stat-label">Items Returned</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ user.stats && user.stats.totalClaimsApproved ? user.stats.totalClaimsApproved : 0 }}</span>
+          <span class="stat-label">Claims Approved</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TABS + CONTENT ── -->
+    <div class="page-container profile-body">
+
+      <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'posts'" (click)="activeTab = 'posts'">Recent Posts</button>
+        <button class="tab" [class.active]="activeTab === 'about'" (click)="activeTab = 'about'">About</button>
+      </div>
+
+      <!-- Posts Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'posts'">
+        <div class="posts-grid" *ngIf="posts.length">
+          <a class="mini-card" *ngFor="let post of posts" [routerLink]="['/post', post._id]">
+            <div class="mini-card-image">
+              <img *ngIf="post.images && post.images.length" [src]="post.images[0].url" [alt]="post.itemName" />
+              <div *ngIf="!post.images || !post.images.length" class="mini-placeholder">
+                {{ getCategoryIcon(post.category) }}
+              </div>
+              <span [class]="post.type === 'Lost' ? 'badge-lost' : 'badge-found'" class="mini-badge">
+                {{ post.type }}
+              </span>
+            </div>
+            <div class="mini-body">
+              <p class="mini-name">{{ post.itemName }}</p>
+              <p class="mini-landmark">📍 {{ post.landmark }}</p>
+              <p class="mini-date">{{ post.createdAt | date:'MMM d, yyyy' }}</p>
+            </div>
+          </a>
+        </div>
+        <div class="empty-posts" *ngIf="!posts.length">
+          <span>📭</span>
+          <p>No posts yet.</p>
+        </div>
+      </div>
+
+      <!-- About Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'about'">
+        <div class="about-grid">
+          <div class="about-card">
+            <h4>Contact Info</h4>
+            <div class="about-row">
+              <span class="about-icon">📧</span>
+              <span>{{ isOwnProfile ? (authService.currentUser?.email || '—') : 'Hidden' }}</span>
+            </div>
+            <div class="about-row" *ngIf="user.phoneNumber">
+              <span class="about-icon">📞</span>
+              <span>{{ user.phoneNumber }}</span>
+            </div>
+            <div class="about-row" *ngIf="user.location && user.location.barangay">
+              <span class="about-icon">🏘</span>
+              <span>{{ user.location.barangay }}</span>
+            </div>
+          </div>
+          <div class="about-card">
+            <h4>Badges Earned</h4>
+            <div class="badges-list" *ngIf="user.badges && user.badges.length">
+              <div class="badge-row" *ngFor="let b of user.badges">
+                <span class="badge-chip">{{ getBadgeLabel(b.type) }}</span>
+                <span class="badge-date">{{ b.awardedAt | date:'MMM d, yyyy' }}</span>
+              </div>
+            </div>
+            <p class="no-badges" *ngIf="!user.badges || !user.badges.length">No badges yet. Return items to earn them!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
+
+<!-- ── EDIT PROFILE MODAL ── -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+  <div class="modal-box modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Profile</h3>
+      <button class="modal-close" (click)="closeEditModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Avatar Upload -->
+      <div class="avatar-upload-wrap">
+        <div class="avatar-upload-preview">
+          <img *ngIf="avatarPreview" [src]="avatarPreview" alt="Preview" />
+          <img *ngIf="!avatarPreview && user && user.avatarUrl" [src]="user.avatarUrl!" alt="Avatar" />
+          <span *ngIf="!avatarPreview && user && !user.avatarUrl">{{ (user.username || '?')[0].toUpperCase() }}</span>
+        </div>
+        <div class="avatar-upload-info">
+          <p class="avatar-upload-label">Profile Picture</p>
+          <label class="btn btn-ghost btn-sm avatar-upload-btn">
+            📷 Upload Photo
+            <input type="file" accept="image/*" hidden (change)="onAvatarSelect($event)" />
+          </label>
+          <p class="avatar-upload-hint">JPG or PNG, max 2MB</p>
+        </div>
+      </div>
+
+      <div class="edit-error" *ngIf="saveError">{{ saveError }}</div>
+
+      <div class="edit-grid">
+        <div class="form-group">
+          <label class="form-label">Display Name</label>
+          <input class="form-control" type="text" placeholder="Your full name"
+            [(ngModel)]="editDisplayName" name="editDisplayName" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-control" type="tel" placeholder="+63 9XX XXX XXXX"
+            [(ngModel)]="editPhone" name="editPhone" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Barangay</label>
+          <input class="form-control" type="text" placeholder="e.g. Balibago"
+            [(ngModel)]="editBarangay" name="editBarangay" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nearest Landmark</label>
+          <input class="form-control" type="text" placeholder="e.g. SM City Clark"
+            [(ngModel)]="editLandmark" name="editLandmark" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" (click)="requestSave()" [disabled]="saving">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SAVE CONFIRMATION MODAL ── -->
+<div class="modal-overlay" *ngIf="showSaveModal" (click)="showSaveModal = false">
+  <div class="modal-box modal-sm" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="showSaveModal = false">✕</button>
+    <div class="modal-icon-wrap save-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="12" fill="#2251d4"/>
+        <path d="M6 12.5l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 class="modal-title">Save changes</h3>
+    <p class="modal-subtitle">Do you want to save or discard changes?</p>
+    <div class="modal-actions-col">
+      <button class="btn btn-primary btn-full" (click)="confirmSave()" [disabled]="saving">
+        <span *ngIf="!saving">Confirm</span>
+        <span *ngIf="saving" class="btn-spinner"></span>
+      </button>
+      <button class="btn btn-ghost btn-full" (click)="showSaveModal = false">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DELETE CONFIRMATION MODAL ── -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+  <div class="modal-box modal-sm" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeDeleteModal()">✕</button>
+    <div class="modal-icon-wrap delete-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="12" fill="#fef2f2"/>
+        <path d="M8 8l8 8M16 8l-8 8" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h3 class="modal-title">Account Deletion</h3>
+    <p class="modal-subtitle">Are you sure you want to delete this account? This action cannot be undone.</p>
+    <div class="modal-actions-row">
+      <button class="btn btn-ghost" (click)="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger btn-delete" (click)="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

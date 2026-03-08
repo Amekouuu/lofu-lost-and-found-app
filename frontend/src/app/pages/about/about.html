@@ -1,0 +1,138 @@
+<app-navbar></app-navbar>
+
+<!-- ── HERO ── -->
+<section class="about-hero">
+  <div class="about-hero-inner page-container">
+
+    <div class="hero-text fade-up">
+      <p class="hero-label">Frame 10632</p>
+      <h1>Bringing it Home,<br>One Item at a<br>Time</h1>
+      <p class="hero-desc">
+        We're a community-powered platform helping people in Angeles City
+        reconnect with the things they value most.
+      </p>
+      <a routerLink="/lost-items" class="btn btn-primary btn-lg">Learn More</a>
+    </div>
+
+    <div class="hero-images fade-up">
+      <!-- REPLACE: swap placeholders with real images -->
+      <div class="img-grid">
+        <div class="img-placeholder img-tall">
+          <span>🤝</span>
+          <p>assets/about-hero-1.jpg</p>
+        </div>
+        <div class="img-col">
+          <div class="img-placeholder img-sm">
+            <span>👥</span>
+            <p>assets/about-hero-2.jpg</p>
+          </div>
+          <div class="img-placeholder img-sm">
+            <span>🌆</span>
+            <p>assets/about-hero-3.jpg</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── MISSION TEXT ── -->
+<section class="mission-section page-container">
+  <div class="mission-grid fade-up">
+
+    <div class="mission-text">
+      <p>
+        LoFu helps people discover simple ways to reconnect with their belongings
+        through community trust and honest collaboration.
+      </p>
+      <p>
+        Blending local reporting with a secure verification system, our platform
+        helps neighbors make small, helpful actions that lead to successful recoveries.
+      </p>
+      <p>
+        By combining community-driven insights and neighborly support, we've
+        created a system that empowers individuals to take control of their lost
+        items and their neighborhood's safety. Today, our mission goes beyond a
+        simple list — we're building tools that inspire honesty, kindness, and
+        long-term community connection.
+      </p>
+    </div>
+
+    <div class="mission-image">
+      <!-- REPLACE: swap with <img src="assets/about-mission.jpg" /> -->
+      <div class="img-placeholder img-mission">
+        <span>📸</span>
+        <p>assets/about-mission.jpg</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how-section">
+  <div class="page-container">
+    <h2 class="section-title fade-up">How does LoFu work?</h2>
+    <div class="steps-grid fade-up">
+      <div class="step-card" *ngFor="let s of steps">
+        <div class="step-number">{{ s.number }}</div>
+        <h3 class="step-title">{{ s.title }}</h3>
+        <p class="step-desc">{{ s.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OUR HISTORY ── -->
+<section class="history-section page-container">
+  <div class="history-grid fade-up">
+
+    <div class="history-text">
+      <h2>Our History</h2>
+      <p>
+        LoFu was born from a simple observation of our local community in
+        Angeles City. We noticed that while our neighborhoods are full of helpful
+        people, there wasn't a dedicated, organized space to reconnect lost
+        belongings with their rightful owners.
+      </p>
+      <p>
+        What started as a vision to simplify the "Lost and Found" process has
+        grown into a mission to foster honesty and kindness. We realized that
+        losing an essential item — whether it's a cherished heirloom or a daily
+        necessity — is a stressful experience. We created LoFu to turn that stress
+        into relief by providing a transparent, easy-to-use platform where
+        neighbors can look out for one another.
+      </p>
+    </div>
+
+    <div class="history-image">
+      <!-- REPLACE: swap with <img src="assets/about-history.jpg" /> -->
+      <div class="img-placeholder img-history">
+        <span>📷</span>
+        <p>assets/about-history.jpg</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── LIVING OUR MISSION ── -->
+<section class="living-section">
+  <div class="page-container">
+    <h2 class="section-title fade-up">Living Our mission</h2>
+    <p class="living-subtitle fade-up">
+      Our team is dedicated to fostering honesty and integrity within Angeles City every day.
+    </p>
+
+    <div class="quotes-grid fade-up">
+      <div class="quote-card" *ngFor="let q of quotes">
+        <div class="quote-icon">"</div>
+        <p class="quote-text">{{ q.text }}</p>
+        <p class="quote-author">{{ q.author }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
